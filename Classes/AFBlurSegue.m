@@ -121,8 +121,27 @@
         destinationController.view.backgroundColor = [UIColor clearColor];
         destinationController.modalPresentationStyle = UIModalPresentationOverFullScreen;
 
-        [sourceController presentViewController:destinationController animated:YES completion:^{
-            
+        blurView.effect=nil;
+        
+        for(UIView * view in destinationController.view.subviews)
+        {
+            if(view!=blurView)
+            {
+                view.alpha=0;
+            }
+        }
+        
+        [sourceController presentViewController:destinationController animated:NO completion:^{
+            [UIView animateWithDuration:[CATransaction animationDuration] animations:^{
+               blurView.effect=visualEffect;
+                for(UIView * view in destinationController.view.subviews)
+                {
+                    if(view!=blurView)
+                    {
+                        view.alpha=1;
+                    }
+                }
+            }];
         }];
 
         [destinationController.transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
